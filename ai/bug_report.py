@@ -3,27 +3,26 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
-from ai.prompts import TEST_CASE_PROMPT
+from ai.prompts import BUG_REPORT_PROMPT
 
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
 
-if not API_KEY:
-    raise RuntimeError(
-        "GEMINI_API_KEY not found in .env"
-    )
-
 client = genai.Client(api_key=API_KEY)
 
 
-def generate_test_cases(requirement: str) -> str:
+def generate_bug_report(
+    application: str,
+    error: str,
+) -> str:
     """
-    Generate AI test cases.
+    Generate an AI bug report.
     """
 
-    prompt = TEST_CASE_PROMPT.format(
-        requirement=requirement
+    prompt = BUG_REPORT_PROMPT.format(
+        application=application,
+        error=error,
     )
 
     response = client.models.generate_content(
